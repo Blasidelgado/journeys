@@ -1,5 +1,7 @@
 import checkSessionStatus from "./handleSession.js";
 
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 /**
  * 
  * @param {Object} journey 
@@ -52,14 +54,32 @@ export function parseJourneys(journeys, navigateTo) {
 /**
  * 
  * @param {*} unformattedDate YYYY-MM-DDTHH:MM:SS
- * @returns {string} DD/MM/YYYY HH:MM
+ * @returns {string} Formatted date - Example: 2:30 PM Jan 15, 2024
  */
 export function parseDate(unformattedDate) {
     const [date, time] = unformattedDate.split('T');
     const [year, month, day] = date.split('-');
     const [hour, minutes] = time.split(':');
 
-    const formattedDate = `${day}/${month}/${year} ${hour}:${minutes}`;
+    // Convert hour to 12-hour format with AM/PM
+    const hourInt = parseInt(hour, 10);
+    const period = hourInt >= 12 ? "PM" : "AM";
+    const hour12 = hourInt % 12 || 12; // Convert 0 to 12 for midnight
+
+    const formattedDate = `${hour12}:${minutes} ${period}, ${months[parseInt(month, 10) - 1]} ${parseInt(day, 10)}, ${year}`;
 
     return formattedDate;
+}
+
+export function parseDataForSummary(journeyData) {
+
+    const summaryData = {
+        date: journeyData.date,
+        origin: journeyData.origin,
+        destination: journeyData.destination,
+        available_seats: journeyData.available_seats,
+        seat_price: journeyData.seat_price
+    };
+    
+    return summaryData;
 }
