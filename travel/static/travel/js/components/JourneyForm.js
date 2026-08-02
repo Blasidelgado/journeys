@@ -1,6 +1,7 @@
 import Step from './Step.js';
 import fetchData from '../utils/fetchData.js';
 import { sendNewJourney } from '../utils/sendNewJourney.js';
+import { parseDate, formatPrice } from '../utils/parseJourneys.js';
 
 export default class JourneyForm {
   constructor(container, navigateTo) {
@@ -115,8 +116,14 @@ export default class JourneyForm {
     this.steps.forEach((step) => step.hide());
     step.show();
 
+    const isLastStep = stepIndex === this.steps.length - 1;
     this.prevBtn.disabled = stepIndex === 0;
-    this.nextBtn.textContent = stepIndex === this.steps.length - 1 ? 'Finish' : 'Next';
+    this.nextBtn.textContent = isLastStep ? 'Finish' : 'Next';
+
+    if (isLastStep) {
+      this.renderSummary();
+      step.clearError(); // Clear any previous error messages when showing the summary
+    }
   }
 
   async nextStep() {
@@ -148,6 +155,25 @@ export default class JourneyForm {
     } catch (error) {
       console.error('Error submitting journey:', error);
       this.steps[this.currentStep].showError(error.message);
+    }
+  }
+
+  renderSummary() {
+    // Object destructuring to extract values from newJourneyData
+    const { date, origin, destination, available_seats, seat_price } = this.newJourneyData;
+
+    // Prepare the fields to be updated in the summary using a mapping object
+    const fields = {
+      summaryJourneyDateTime: parseDate(date),
+      summaryOriginCity: origin,
+      summaryDestinationCity: destination,
+      summaryAvailableSeats: available_seats,
+      summarySeatPrice: formatPrice(seat_price),
+    };
+
+    // Update the summary fields in the DOM using the mapping object 
+    for (const [id, value] of Object.entries(fields)) {
+      this.container.querySelector(`#${id}`).textContent = value;
     }
   }
 }

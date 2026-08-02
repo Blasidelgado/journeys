@@ -2,6 +2,11 @@ import checkSessionStatus from "./handleSession.js";
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+const priceFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+
 /**
  * 
  * @param {Object} journey 
@@ -22,7 +27,7 @@ export function parseJourney(journey, navigateTo) {
             <div class="card-body ${journey.isActive? 'bg-light' : 'bg-danger'}">
                 <h5 class="card-title">${parseDate(journey.date)}</h5>
                 <p class="card-text">Driver: <span class="driver-profile">${journey.driver}</span></p>
-                <p class="card-text">Seat price: ${journey.seat_price}</p>
+                <p class="card-text">Seat price: ${formatPrice(journey.seat_price)}</p>
                 <p class="card-text">Status: ${journey.isActive ? "active" : "cancelled"}</p>
                 <btn data-id=${journey.id} type='button' class="action-btn btn btn-primary"></btn>
             </div>
@@ -71,15 +76,11 @@ export function parseDate(unformattedDate) {
     return formattedDate;
 }
 
-export function parseDataForSummary(journeyData) {
-
-    const summaryData = {
-        date: journeyData.date,
-        origin: journeyData.origin,
-        destination: journeyData.destination,
-        available_seats: journeyData.available_seats,
-        seat_price: journeyData.seat_price
-    };
-    
-    return summaryData;
+/**
+ * 
+ * @param {number} value 
+ * @returns {string} Formatted price - Example: $10.00
+ */
+export function formatPrice(value) {
+    return priceFormatter.format(value);
 }
