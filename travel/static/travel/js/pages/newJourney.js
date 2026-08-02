@@ -1,6 +1,6 @@
 import JourneyForm from '../components/JourneyForm.js';
 
-export default function newJourneyPage() {
+export default function newJourneyPage(navigateTo) {
   const container = document.createElement('div'); // Create a container for the page
   container.id = 'new-journey-container'; // Add an ID for styling or debugging
   container.innerHTML = `
@@ -73,13 +73,14 @@ export default function newJourneyPage() {
             <p><strong>Available Seats:</strong> <span id="summaryAvailableSeats"></span></p>
             <p><strong>Seat Price:</strong> <span id="summarySeatPrice"></span></p>
           </div>
+          <p id="summaryError" class="error-message" role="alert">Please review your inputs and try again.</p>
         </fieldset>
       </div>
     </section>
   `;
 
   const formContainer = container.querySelector('#journey-form-container');
-  new JourneyForm(formContainer); // Initialize the JourneyForm inside the container
+  new JourneyForm(formContainer, navigateTo); // Initialize the JourneyForm inside the container
 
   return container; // Return the container to be appended
 }

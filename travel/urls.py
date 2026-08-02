@@ -11,6 +11,7 @@ urlpatterns = [
     path('travel', views.index, name="index"),
     path('new-journey', views.index, name="index"),
     path('my-journeys', views.index, name="index"),
+    path('journey/<int:journey_id>', views.index, name="index"),
     path('search-journey', views.index, name="index"),
     # api urls
     path('api/users', views.handle_users, name="users"),

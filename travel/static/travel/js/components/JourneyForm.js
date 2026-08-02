@@ -1,9 +1,11 @@
 import Step from './Step.js';
 import fetchData from '../utils/fetchData.js';
+import { sendNewJourney } from '../utils/sendNewJourney.js';
 
 export default class JourneyForm {
-  constructor(container) {
+  constructor(container, navigateTo) {
     this.container = container;
+    this.navigateTo = navigateTo;
     this.newJourneyData = {
       date: null,
       origin: null,
@@ -117,15 +119,18 @@ export default class JourneyForm {
     this.nextBtn.textContent = stepIndex === this.steps.length - 1 ? 'Finish' : 'Next';
   }
 
-  nextStep() {
+  async nextStep() {
     const currentStep = this.steps[this.currentStep];
-    if (currentStep.validate()) {
+
+    if (!currentStep.validate()) {
+      return; // Validation failed, do not proceed to the next step
+    }
+
+    if (this.currentStep === this.steps.length - 1) {
+      await this.submit();
+    } else {
       this.currentStep++;
-      if (this.currentStep === this.steps.length) {
-        console.log('Journey completed:', this.newJourneyData);
-      } else {
-        this.showStep(this.currentStep);
-      }
+      this.showStep(this.currentStep);
     }
   }
 
@@ -133,6 +138,16 @@ export default class JourneyForm {
     if (this.currentStep > 0) {
       this.currentStep--;
       this.showStep(this.currentStep);
+    }
+  }
+
+  async submit() {
+    try {
+      const journey = await sendNewJourney(this.newJourneyData);
+      this.navigateTo('/journey', journey.id);
+    } catch (error) {
+      console.error('Error submitting journey:', error);
+      this.steps[this.currentStep].showError(error.message);
     }
   }
 }
