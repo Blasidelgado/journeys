@@ -14,6 +14,7 @@ export default class JourneyForm {
       available_seats: null,
       seat_price: null,
     };
+    this.journeyDay = null;
     this.steps = [];
     this.currentStep = 0;
 

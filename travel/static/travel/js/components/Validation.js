@@ -1,21 +1,29 @@
 export default class Validation {
-  static getMinJourneyDate() {
+
+  static getMinJourneyDateTime() {
     const date = new Date();
     date.setDate(date.getDate() + 1);
+
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
 
+    return `${year}-${month}-${day}T${hours}:${minutes}:00`;
+  }
+  
   static validateDate(date) {
+    // Check if the date is provided
     if (!date) {
       return { valid: false, message: "Please select a valid journey day." };
     }
 
-    const minDate = Validation.getMinJourneyDate();
+    // Check if the date is at least 1 day in advance
+    const minDate = Validation.getMinJourneyDateTime().split('T')[0]; // Get the date part only
     if (date < minDate) return { valid: false, message: "The journey must be scheduled at least 1 day in advance." };
   
+    // If all checks pass, return valid
     return { valid: true };
   }
 

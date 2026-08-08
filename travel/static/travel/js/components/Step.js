@@ -15,7 +15,7 @@ export default class Step {
       // Step 1: Journey Day - Set minimum date and placeholder
       const dateInput = this.stepElement.querySelector('#journeyDay');
 
-      const minDate = Validation.getMinJourneyDate(); // Get the minimum journey date (1 day in advance)
+      const minDate = Validation.getMinJourneyDateTime().split('T')[0]; // Get the minimum journey date (1 day in advance)
       dateInput.min = minDate;
       dateInput.placeholder = 'mm/dd/yyyy'; // Show placeholder instead of default value
       dateInput.value = ''; // Ensure no default value is selected
@@ -43,13 +43,13 @@ export default class Step {
           this.showError(validationResult.message);
           return false;
         }
-        this.form.newJourneyData.date = dateInput.value;
+        this.form.journeyDay = dateInput.value;
         break;
 
       case 1: // Step 2: Journey Time
         const hourInput = this.stepElement.querySelector('#travelHour');
         const minuteInput = this.stepElement.querySelector('#travelMinutes');
-        validationResult = Validation.validateTime(hourInput.value, minuteInput.value, this.form.newJourneyData.date);  
+        validationResult = Validation.validateTime(hourInput.value, minuteInput.value, this.form.journeyDay);  
         if (!validationResult.valid) {
           this.showError(validationResult.message);
           return false;
