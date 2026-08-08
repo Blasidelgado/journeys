@@ -6,14 +6,14 @@ export default function newJourneyPage(navigateTo) {
   container.innerHTML = `
     <section class="new-journey">
       <h1>Create a New Journey</h1>
-      <div class="journey-tab-container">
-        <div class="tab">Step 1: Journey Day</div>
-        <div class="tab">Step 2: Journey Time</div>
-        <div class="tab">Step 3: Origin and Destination</div>
-        <div class="tab">Step 4: Seats and Price</div>
-        <div class="tab">Step 5: Summary</div>
-      </div>
       <div id="journey-form-container">
+        <div class="journey-tab-container">
+          <div class="tab">Step 1: Journey Day</div>
+          <div class="tab">Step 2: Journey Time</div>
+          <div class="tab">Step 3: Origin and Destination</div>
+          <div class="tab">Step 4: Seats and Price</div>
+          <div class="tab">Step 5: Summary</div>
+        </div>
         <!-- Step 1: Journey Day -->
         <fieldset class="step">
           <legend>Journey Day</legend>
