@@ -45,8 +45,15 @@ export default class Validation {
 
     const hour24 = hour24Int.toString().padStart(2, '0');
 
-    // Return the combined date and time in ISO format for further processing, without timezone conversion
-    return { valid: true, date: `${date}T${hour24}:${minutes}:00` };
+    // Combined date and time in ISO format, without timezone conversion
+    const journeyDateTime = `${date}T${hour24}:${minutes}:00`;
+
+    // Only here are day, hour and minutes known, so this is where the min journey datetime rule is enforced, matching server rules
+    if (journeyDateTime < Validation.getMinJourneyDateTime()) {
+      return { valid: false, message: "The journey must be scheduled at least 24 hours in advance." };
+    }
+
+    return { valid: true, date: journeyDateTime };
   }
 
   static validateCities(origin, destination) {
