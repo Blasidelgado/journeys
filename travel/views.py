@@ -221,18 +221,18 @@ def retrieve_all_journeys(request):
 
 @login_required(login_url="/")
 def create_journey(request):
-    data = json.loads(request.body.decode('utf-8'))
-
-    journey_date = data["date"]
-    # Check if date is at least the current day + 1
-    if datetime.strptime(journey_date, '%Y-%m-%dT%H:%M:%S') < (timezone.now() + timedelta(days=1)):
-        return JsonResponse({'success': False, 'message': 'Invalid date'}, status=400)
-    driver = UserProfile.objects.get(user=request.user)
-    origin = City.objects.get(city_name=data["origin"])
-    destination = City.objects.get(city_name=data["destination"])
-
-    # Create journey and set journey's driver
     try:
+        data = json.loads(request.body.decode('utf-8'))
+
+        journey_date = data["date"]
+        # Check if date is at least the current day + 1
+        if datetime.strptime(journey_date, '%Y-%m-%dT%H:%M:%S') < (timezone.now() + timedelta(days=1)):
+            return JsonResponse({'success': False, 'message': 'Invalid date'}, status=400)
+        driver = UserProfile.objects.get(user=request.user)
+        origin = City.objects.get(city_name=data["origin"])
+        destination = City.objects.get(city_name=data["destination"])
+
+        # Create journey and set journey's driver
         new_journey = JourneyDetails(
             date=journey_date,
             driver=driver, 
@@ -246,7 +246,11 @@ def create_journey(request):
 
         return JsonResponse({'success': True, 'journey': new_journey.journey_details()}, status=201)
 
-    # Inform client the validation error
+    # Handle validation errors and other exceptions
+    except (ValueError, KeyError):
+        return JsonResponse({'success': False, 'message': 'Invalid data provided'}, status=400)
+    except (City.DoesNotExist, UserProfile.DoesNotExist):
+        return JsonResponse({'success': False, 'message': 'City or user not found'}, status=404)
     except ValidationError as e:
         return JsonResponse({'success': False, 'message': dict(e)}, status=400)            
     except Exception:
