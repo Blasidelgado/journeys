@@ -59,8 +59,6 @@ export default async function loginPage(navigateTo) {
             const data = await response.json();
             
             if (data.success) {
-                sessionStorage.setItem('userId', data.userId)
-                sessionStorage.setItem('username', data.username)
                 await navigateTo('/');
             } else {
                 formFields.forEach(input => input.classList.add('is-invalid'));

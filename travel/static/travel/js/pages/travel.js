@@ -1,6 +1,6 @@
 import fetchData from "../utils/fetchData.js";
 
-export default async function travelPage(navigateTo) {
+export default async function travelPage(navigateTo, appState) {
     const container = document.createElement("section");
     container.innerHTML = `
     <div class="py-lg-16 py-10 bg-gray-200">
@@ -70,7 +70,7 @@ export default async function travelPage(navigateTo) {
     `;
     
       modalContent.querySelector("#load-profile").onclick = () => {
-          navigateTo('/profile', sessionStorage.getItem('username'));
+          navigateTo('/profile', appState.username);
       }
     
       return new bootstrap.Modal(modalContent, {

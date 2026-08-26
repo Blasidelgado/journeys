@@ -66,8 +66,6 @@ export default function registerPage(navigateTo) {
             const data = await response.json();
 
             if (data.success) {
-                sessionStorage.setItem('userId', data.userId);
-                sessionStorage.setItem('username', data.username);
                 await navigateTo('/');
             } else {
                 console.error('Error de registro:', data.message);

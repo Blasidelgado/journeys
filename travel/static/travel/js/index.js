@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
             navigateTo(
                 event.target.dataset.page,
                 event.target.dataset.page === '/profile' ? 
-                    sessionStorage.getItem('username') :
+                    appState.username :
                     null
             )
         }
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body.appendChild(await homePage(appState.sessionStatus));
                 break;
             case '/travel':
-                body.appendChild(await travelPage(navigateTo));
+                body.appendChild(await travelPage(navigateTo, appState));
                 break;
             case '/search-journey':
                 body.appendChild(await searchJourney());
