@@ -2,12 +2,13 @@ import getCSRFCookie from "../utils/csrfHandler.js";
 import fetchData from "../utils/fetchData.js";
 import { parseJourney } from "../utils/parseJourneys.js";
 
-export default async function journeyDetail(journey_id, navigateTo) {
-  console.log(journeyDetail);
-  if (!sessionStorage.getItem('userId')) {
-    return;
-  }
+export default async function journeyDetail(journey_id, navigateTo, appState) {
   const container = document.createElement('section');
+
+  if (!appState.sessionStatus) {
+    navigateTo('/login');
+    return container;
+  }
 
   const response = await fetchData(`/api/travel/${journey_id}/`);
   if (response.success) {
@@ -15,8 +16,8 @@ export default async function journeyDetail(journey_id, navigateTo) {
 
     const journeyArt = parseJourney(journey, navigateTo);
     
-    const driverStatus = isDriver(journey.driver);
-    const passengerStatus = isPassenger(journey.passengers);
+    const driverStatus = isDriver(journey.driver, appState.username);
+    const passengerStatus = isPassenger(journey.passengers, appState.userId);
     
     const actionBtn = journeyArt.querySelector('.action-btn');
 
@@ -53,9 +54,12 @@ export default async function journeyDetail(journey_id, navigateTo) {
   }
   else if (response.message === "User not authenticated") {
     navigateTo('/login');
+    return container;
   }
   else {
     console.error(response.message);
+    container.innerHTML = `<p class="alert alert-danger">Could not load this journey</p>`;
+    return container;
   }
 }
 
@@ -121,18 +125,20 @@ async function cancelJourney(journeyId) {
 /**
  * Function to check if current user is a driver of a journey
  * @param {string} driver Driver's username 
+ * @param {string} username Current user's username
  * @returns {boolean} 
  */
-export function isDriver(driver) {
-    return driver === sessionStorage.getItem('username')
+export function isDriver(driver, username) {
+    return driver === username
 }
 
 /**
  * Function to check if current is passenger of a journey
- * @param {number[]} passengers 
+ * @param {number[]} passengers Passengers' userIds
+ * @param {number} userId Current user's userId
  * @returns {boolean}
  */
-export function isPassenger(passengers) {
-    const findUser = passengers.find(userId => userId === parseInt(sessionStorage.getItem('userId')))
+export function isPassenger(passengers, userId) {
+    const findUser = passengers.find(id => id === userId)
     return !!findUser
 }

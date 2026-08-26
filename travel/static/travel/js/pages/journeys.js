@@ -25,7 +25,8 @@ export default async function allJourneys(navigateTo, page=1) {
 
             // Add corresponding action to journey buttons
             container.querySelectorAll('.action-btn').forEach(async btn => {
-                btn.onclick = await checkSessionStatus() ? 
+                const sessionData = await checkSessionStatus();
+                btn.onclick = sessionData.success ? 
                 () => navigateTo('/journey', btn.dataset.id) :
                 () => navigateTo('/login'); 
             })

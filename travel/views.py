@@ -142,7 +142,7 @@ def handle_logout(request):
 
 def handle_session(request):
     if request.user.is_authenticated:
-        return JsonResponse({'success': True}, status=200)
+        return JsonResponse({'success': True, 'userId': request.user.id, 'username': request.user.username}, status=200)
     
     return JsonResponse({'success': False}, status=200)
 

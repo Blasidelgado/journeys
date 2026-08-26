@@ -37,9 +37,14 @@ export function parseJourney(journey, navigateTo) {
         </div>
     `;
 
-    wrapper.querySelector('.driver-profile').onclick = async () =>
-                                                await checkSessionStatus() ? navigateTo('/profile', journey.driver)
-                                                : navigateTo('/login')
+    wrapper.querySelector('.driver-profile').onclick = async () => {
+        const sessionData = await checkSessionStatus();
+        if (sessionData.success) {
+            navigateTo('/profile', journey.driver);
+        } else {
+            navigateTo('/login');
+        }
+    };
     const actionBtn = wrapper.querySelector('.action-btn');
 
     actionBtn.innerText = 'See details';

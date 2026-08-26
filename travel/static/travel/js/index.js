@@ -15,6 +15,8 @@ import logout from "./pages/auth/logout.js";
 
 export const appState = {
     sessionStatus: false,
+    userId: null,
+    username: null,
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -146,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body.appendChild(await profilePage(appState.sessionStatus, payload));
                 break;
             case '/journey':
-                body.appendChild(await journeyDetail(payload, navigateTo));
+                body.appendChild(await journeyDetail(payload, navigateTo, appState));
                 break;
             case '/login':
                 if (!appState.sessionStatus) {
@@ -168,5 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 async function updateSessionStatus() {
-    appState.sessionStatus = await checkSessionStatus();
+    const sessionData = await checkSessionStatus();
+    appState.sessionStatus = sessionData.success;
+    appState.userId = sessionData.userId ?? null;
+    appState.username = sessionData.username ?? null;
 }
