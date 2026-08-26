@@ -280,13 +280,6 @@ div.item {
     border-radius: 10px;
 }
 
-.error-message {
-    visibility: hidden;
-    color: red;
-    font-size: 0.875em;
-    margin-top: 0.5em;
-}
-
 .wizard-buttons {
     margin-top: 20px;
 }
