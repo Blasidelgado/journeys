@@ -208,7 +208,7 @@ div.item {
     min-height: 1.2rem; /* Ensure consistent height for the error message */
 }
 
-/* /travel page */
+/* Travel page */
 
 .page-container {
     height: 100vh;
@@ -270,6 +270,8 @@ div.item {
 .journey-tab-container {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .journey-tab-container > div {
@@ -278,6 +280,14 @@ div.item {
     padding: 0.5rem;
     background-color: #788BFF;
     border-radius: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tab.active {
+    background-color: #394da8;
+    border-color: #394da8;
+    color: #fff;
+    font-weight: 700;
 }
 
 .wizard-buttons {

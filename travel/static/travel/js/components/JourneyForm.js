@@ -108,15 +108,28 @@ export default class JourneyForm {
   }
 
   showStep(stepIndex) {
+    // Ensure the stepIndex is within bounds
     const step = this.steps[stepIndex];
     if (!step) {
       console.error(`Step at index ${stepIndex} does not exist.`);
       return;
     }
-
     this.steps.forEach((step) => step.hide());
     step.show();
+    
+    // Update the active tab
+    const tabs = this.container.querySelectorAll('.tab');
+    tabs.forEach((tab, i) => {
+      const isCurrent = i === stepIndex;
+      tab.classList.toggle('active', isCurrent);
+      if (isCurrent) {
+        tab.setAttribute('aria-current', 'step');
+      } else {
+        tab.removeAttribute('aria-current');
+      }
+    });
 
+    // Update button states
     const isLastStep = stepIndex === this.steps.length - 1;
     this.prevBtn.disabled = stepIndex === 0;
     this.nextBtn.textContent = isLastStep ? 'Finish' : 'Next';
