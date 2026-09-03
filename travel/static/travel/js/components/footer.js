@@ -4,7 +4,7 @@ export default function footerComponent() {
 
     footer.innerHTML = `
           <p id="rights" class="text-center bg-body-tertiary p-3 mb-0" aria-label="Copyright">
-            Travel Project <span id="year">${getYear()}</span>. Made by Blas Ignacio Delgado. For CS5O Web Programming Harvard University.
+            Journeys <span id="year">${getYear()}</span>. Made by Blas Ignacio Delgado. For CS50 Web Programming Harvard University.
           </p>
     `
 
