@@ -229,6 +229,11 @@ def create_journey(request):
         if datetime.strptime(journey_date, '%Y-%m-%dT%H:%M:%S') < (timezone.now() + timedelta(days=1)):
             return JsonResponse({'success': False, 'message': 'Invalid date'}, status=400)
         driver = UserProfile.objects.get(user=request.user)
+
+        # Check if driver has a car and license
+        if not driver.has_license() or not driver.has_car():
+            return JsonResponse({'success': False, 'message': 'Driver must have a car and a license to create a journey'}, status=403)
+
         origin = City.objects.get(city_name=data["origin"])
         destination = City.objects.get(city_name=data["destination"])
 

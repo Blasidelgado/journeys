@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class UserProfile(models.Model):
@@ -45,8 +46,8 @@ class JourneyDetails(models.Model):
     driver = models.ForeignKey(UserProfile, blank=False, null=False, on_delete=models.CASCADE, related_name='driven_journeys')
     origin = models.ForeignKey(City, blank=False, null=False, on_delete=models.CASCADE, related_name='origin_journeys')
     destination = models.ForeignKey(City, blank=False, null=False, on_delete=models.CASCADE, related_name='destination_journeys')
-    seat_price = models.PositiveIntegerField(null=False)
-    available_seats = models.PositiveSmallIntegerField(null=False)
+    seat_price = models.PositiveIntegerField(null=False, validators=[minValueValidator(1), maxValueValidator(999)])
+    available_seats = models.PositiveSmallIntegerField(null=False, validators=[minValueValidator(1), maxValueValidator(7)])
     passengers = models.ManyToManyField(UserProfile, related_name='journeys_as_passenger')
     isActive = models.BooleanField(blank=False, null=False, default=True)
 
