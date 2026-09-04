@@ -34,7 +34,7 @@ The most involved piece is the **multi-step journey wizard**, built from three c
 
 Handling time correctly turned out to be the subtlest problem in the project, and it is documented under design decisions below because the naive approach fails silently.
 
-Validation is deliberately layered. The same rule can appear in an input's `min` attribute for immediate affordance, in the client validator for fast feedback, and in the view or model for enforcement — but only the server is authoritative. The client's copy is a convenience, and the wizard's step-by-step gating is the reason it exists: revalidating every step against the network would make the form unusable offline and sluggish online.
+Validation is deliberately layered, and only the server is authoritative. The same rule appears in an input's `min` attribute for immediate affordance, in the client validator for fast feedback, and in the model for enforcement: seat counts and prices carry field validators, the twenty-four-hour rule is checked again in the view, and publishing is gated behind a permission check that returns `403` if the driver has no licence or car. A request crafted outside this interface is held to exactly the same rules. The client's copy is a convenience, and the wizard's step-by-step gating is the reason it exists: revalidating every step against the network would make the form unusable offline and sluggish online.
 
 The backend contributes a relational model with four tables, a many-to-many relationship, a `UniqueConstraint` preventing a driver from being in two places at once, model-level validation through `clean()`, pagination across three separate listing views, and a **data migration** that seeds the city catalogue so the application is usable immediately after `migrate` with no manual setup.
 
@@ -79,4 +79,4 @@ The application is then available at `http://127.0.0.1:8000/`. Register an accou
 
 ## Future work
 
-Estimated arrival time was designed and deliberately deferred: modelling it as a duration rather than an absolute time avoids a midnight-crossing edge case, but it was outside the scope of this submission. The test suite is not yet written. Some validation rules currently enforced on the client should be mirrored as model-level validators so the API is authoritative against any request, not only against requests from this interface.
+Estimated arrival time was designed and deliberately deferred: modelling it as a duration rather than an absolute arrival avoids a midnight-crossing edge case, but it was outside the scope of this submission. Seat prices are informational — the platform helps travellers agree on a contribution, it does not process payments, and adding settlement would be the largest single change to the domain. The automated test suite is not yet written; correctness was verified through manual testing against the running application.
