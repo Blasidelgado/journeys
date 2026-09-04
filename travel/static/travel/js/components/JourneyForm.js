@@ -163,12 +163,26 @@ export default class JourneyForm {
   }
 
   async submit() {
+    const nextBtnText = this.nextBtn.textContent;
     try {
+      // Lock the controls so a second click cannot fire another request,
+      // and signal that something is happening while the request travels
+      this.prevBtn.disabled = true;
+      this.nextBtn.disabled = true;
+      this.nextBtn.textContent = 'Loading...';
+
       const journey = await sendNewJourney(this.newJourneyData);
       this.navigateTo('/journey', journey.id);
     } catch (error) {
       console.error('Error submitting journey:', error);
       this.steps[this.currentStep].showError(error.message);
+    }
+    finally {
+      // Runs on success and on failure alike, so a failed submit always
+      // leaves the user able to retry
+      this.prevBtn.disabled = false;
+      this.nextBtn.disabled = false;
+      this.nextBtn.textContent = nextBtnText;
     }
   }
 
