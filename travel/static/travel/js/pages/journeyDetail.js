@@ -40,15 +40,15 @@ export default async function journeyDetail(journey_id, navigateTo, appState) {
     function defineJourney() {
         if (driverStatus) {
             actionBtn.innerText = 'Cancel journey';
-            actionBtn.onclick = async () => cancelJourney(journey.id);
+            actionBtn.onclick = async () => cancelJourney(journey.id, navigateTo);
         }
         else if (passengerStatus) {
             actionBtn.innerText = 'Leave';
-            actionBtn.onclick = async () => updateJourney(journey.id);
+            actionBtn.onclick = async () => updateJourney(journey.id, navigateTo);
         }
         else {
             actionBtn.innerText = 'Join';
-            actionBtn.onclick = async () => updateJourney(journey.id);
+            actionBtn.onclick = async () => updateJourney(journey.id, navigateTo);
         }
     }
   }
@@ -75,9 +75,9 @@ export function parseJourneys(journeys, navigateTo) {
 /**
  * Function to change the passengers status
  * @param {number} journeyId
- * 
+ * @param {function} navigateTo Function to navigate to a different page
  */
-async function updateJourney(journeyId) {
+async function updateJourney(journeyId, navigateTo) {
         const action = {'action': 'update'}
         const response = await fetch(`/api/travel/${journeyId}/`, {
         method: "PUT",
@@ -91,18 +91,18 @@ async function updateJourney(journeyId) {
 
       if (data.success) {
         // Take user back to /userJourneys page
-        changeAppState("userJourneys");
+        navigateTo('/userJourneys');
       } else {
-        console.log(data.message);
+        console.error(data.message);
       }
 }
 
 /**
  * Function to cancel a journey
  * @param {number} journeyId 
- * 
+ * @param {function} navigateTo Function to navigate to a different page
  */
-async function cancelJourney(journeyId) {
+async function cancelJourney(journeyId, navigateTo) {
     const action = {'action': 'cancel'}
     const response = await fetch(`/api/travel/${journeyId}/`, {
         method: "PUT",
@@ -116,9 +116,9 @@ async function cancelJourney(journeyId) {
 
       if (data.success) {
         // Take user back to /userJourneys page
-        changeAppState("userJourneys");
+        navigateTo('/userJourneys');
       } else {
-        console.log(data.message);
+        console.error(data.message);
       }
 }
 
