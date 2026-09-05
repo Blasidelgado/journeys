@@ -47,7 +47,7 @@ class JourneyDetails(models.Model):
     origin = models.ForeignKey(City, blank=False, null=False, on_delete=models.CASCADE, related_name='origin_journeys')
     destination = models.ForeignKey(City, blank=False, null=False, on_delete=models.CASCADE, related_name='destination_journeys')
     seat_price = models.PositiveIntegerField(null=False, validators=[MinValueValidator(1), MaxValueValidator(999)])
-    available_seats = models.PositiveSmallIntegerField(null=False, validators=[minValueValidator(1), maxValueValidator(7)])
+    available_seats = models.PositiveSmallIntegerField(null=False, validators=[MinValueValidator(1), MaxValueValidator(7)])
     passengers = models.ManyToManyField(UserProfile, related_name='journeys_as_passenger')
     isActive = models.BooleanField(blank=False, null=False, default=True)
 
