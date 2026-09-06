@@ -90,8 +90,8 @@ async function updateJourney(journeyId, navigateTo) {
       const data = await response.json();
 
       if (data.success) {
-        // Take user back to /userJourneys page
-        navigateTo('/userJourneys');
+        // Take user back to my journeys page
+        navigateTo('/my-journeys');
       } else {
         console.error(data.message);
       }
@@ -115,8 +115,8 @@ async function cancelJourney(journeyId, navigateTo) {
       const data = await response.json();
 
       if (data.success) {
-        // Take user back to /userJourneys page
-        navigateTo('/userJourneys');
+        // Take user back to /my-journeys page
+        navigateTo('/my-journeys');
       } else {
         console.error(data.message);
       }
