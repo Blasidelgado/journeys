@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         switch(page) {
             case '/':
-                body.appendChild(await homePage(appState.sessionStatus));
+                body.appendChild(await homePage(appState.sessionStatus, navigateTo));
                 break;
             case '/travel':
                 body.appendChild(await travelPage(navigateTo, appState));
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     body.appendChild(await loginPage(navigateTo));
                     break;
                 } else {
-                    body.appendChild(await homePage(appState.sessionStatus));
+                    body.appendChild(await homePage(appState.sessionStatus, navigateTo));
                     break;
                 }
             case '/register':

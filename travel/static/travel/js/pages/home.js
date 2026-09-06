@@ -1,4 +1,4 @@
-export default async function homePage(sessionStatus) {
+export default async function homePage(sessionStatus, navigateTo) {
     const homeContainer = document.createElement('section');
 
     homeContainer.innerHTML = `
@@ -54,9 +54,9 @@ export default async function homePage(sessionStatus) {
         `;
 
         if (sessionStatus) {
-            callToAction.querySelector("#cta-btn").onclick = () => changeAppState("travel");
+            callToAction.querySelector("#cta-btn").onclick = () => navigateTo('/travel');
         } else {
-            callToAction.querySelector("#cta-btn").onclick = () => changeAppState("login");
+            callToAction.querySelector("#cta-btn").onclick = () => navigateTo('/login');
         }
     homeContainer.appendChild(callToAction);
 
