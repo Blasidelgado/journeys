@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 
 
 # Create your views here.
-def index(request, subpath = None):
+def index(request, **kwargs): # Include keyword arguments to handle subpaths
     get_token(request)
     return render(request, "travel/index.html", status=200)
 
