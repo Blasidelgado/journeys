@@ -7,7 +7,7 @@ import pageButtons from "./pageButtons.js";
  * Function to query journeys selecting cities
  * 
  */
-export default async function searchJourneyPage() {
+export default async function searchJourneyPage(navigateTo) {
     const container = document.createElement("section");
     container.innerHTML = '<h1 class="h1 text-center">Please select your origin and destination city</h1>'
 
@@ -80,7 +80,7 @@ export default async function searchJourneyPage() {
 
         if (response.success) {
             const {journeys, hasNext, hasPrev} = response;
-            const info = parseJourneys(journeys);
+            const info = parseJourneys(journeys, navigateTo);
             if (info.length > 0) {
                 // Fill container with journeys
                 info.forEach(elem => journeysContainer.appendChild(elem));
@@ -88,7 +88,7 @@ export default async function searchJourneyPage() {
 
                 // Add corresponding action to journey buttons
                 journeysContainer.querySelectorAll('.action-btn').forEach(async btn => {
-                    btn.onclick = () => changeAppState("journey", btn.dataset.id) 
+                    btn.onclick = () => navigateTo('/journey', btn.dataset.id) 
                 })
 
                 // Attach event listener to prev and next buttons

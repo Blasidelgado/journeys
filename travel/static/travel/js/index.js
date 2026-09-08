@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body.appendChild(await travelPage(navigateTo, appState));
                 break;
             case '/search-journey':
-                body.appendChild(await searchJourney());
+                body.appendChild(await searchJourney(navigateTo));
                 break;
             case '/new-journey':
                 body.appendChild(newJourneyPage(navigateTo));
